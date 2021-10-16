@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: master-argo-cd
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: master
+  source:
+    repoURL: https://github.com/andrewkaczynski/gitops.git
+    targetRevision: HEAD
+    path: repos/argo-cd/3.25.1/
+
+    helm:
+      releaseName: argocd
+      valueFiles:
+      - ../../../clusters/master/applications/argo-cd/values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+
+  syncPolicy:
+    automated: 
+      prune: true
+      selfHeal: true
