@@ -4001,4 +4001,4 @@ metadata:
   name: grafana-dashboard-argocd
   namespace: monitoring
   labels:
-    grafana_dashboard: true
+    grafana_dashboard: "1"
