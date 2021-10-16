@@ -25,5 +25,5 @@ kube-prometheus-stack:
         repository: quay.io/prometheus/prometheus
         tag: v2.30.3
 
-      serviceMonitorSelectorNilUsesHelmValues: nil
+      serviceMonitorSelectorNilUsesHelmValues: false
       serviceMonitorSelector: {}
