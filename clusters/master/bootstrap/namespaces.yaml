@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: master-namespaces
+  namespace: argocd
+spec:
+  project: master
+  source:
+    repoURL: https://github.com/andrewkaczynski/gitops.git
+    targetRevision: HEAD
+    path: clusters/master/namespaces
+
+  destination:
+    server: https://kubernetes.default.svc
+
+  syncPolicy:
+    automated: 
+      prune: true
+      selfHeal: true
