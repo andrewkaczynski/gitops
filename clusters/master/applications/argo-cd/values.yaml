@@ -4,13 +4,7 @@ argo-cd:
     replicas: 2
     # Deploy the application as a StatefulSet instead of a Deployment, this is required for HA capability.
     # This is a feature flag that will become the default in chart version 3.x
-    enableStatefulSet: true
-    args:
-      statusProcessors: "20"
-      operationProcessors: "10"
-      appResyncPeriod: "180"
-      selfHealTimeout: "5"
-      repoServerTimeoutSeconds: "60"
+    enableStatefulSet: false
     env:
       - name: "ARGOCD_CONTROLLER_REPLICAS"
         value: "2"
@@ -18,7 +12,7 @@ argo-cd:
     metrics:
       enabled: true
       serviceMonitor:
-        enabled: false
+        enabled: true
 
   dex:
     enabled: false
@@ -34,18 +28,14 @@ argo-cd:
 
   server:
     name: server
-    replicas: 1
+    replicas: 2
     autoscaling:
-      enabled: true
-      minReplicas: 2
-      maxReplicas: 5
-      targetCPUUtilizationPercentage: 50
-      targetMemoryUtilizationPercentage: 50
+      enabled: false
 
     metrics:
       enabled: true
       serviceMonitor:
-        enabled: false
+        enabled: true
 
     additionalApplications:
     - name: master-bootstrap
@@ -79,19 +69,15 @@ argo-cd:
   repoServer:
     name: repo-server
 
-    replicas: 1
+    replicas: 2
 
     autoscaling:
-      enabled: true
-      minReplicas: 2
-      maxReplicas: 5
-      targetCPUUtilizationPercentage: 50
-      targetMemoryUtilizationPercentage: 50
+      enabled: false
 
     metrics:
       enabled: true
       serviceMonitor:
-        enabled: false
+        enabled: true
 
   ## Argo Configs
   configs:
