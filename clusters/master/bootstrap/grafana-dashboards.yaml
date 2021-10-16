@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: master-grafana-dashboards
+  namespace: argocd
+spec:
+  project: master
+  source:
+    repoURL: https://github.com/andrewkaczynski/gitops.git
+    targetRevision: HEAD
+    path: clusters/master/configurations/grafana-dashboards
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+
+  syncPolicy:
+    automated: 
+      prune: true
+      selfHeal: true
