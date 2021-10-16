@@ -1,0 +1,101 @@
+argo-cd:
+  controller:
+    # If changing the number of replicas you must pass the number as ARGOCD_CONTROLLER_REPLICAS as an environment variable
+    replicas: 2
+    # Deploy the application as a StatefulSet instead of a Deployment, this is required for HA capability.
+    # This is a feature flag that will become the default in chart version 3.x
+    enableStatefulSet: true
+    args:
+      statusProcessors: "20"
+      operationProcessors: "10"
+      appResyncPeriod: "180"
+      selfHealTimeout: "5"
+      repoServerTimeoutSeconds: "60"
+    env:
+      - name: "ARGOCD_CONTROLLER_REPLICAS"
+        value: "2"
+
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: false
+
+  dex:
+    enabled: false
+
+  redis:
+    enabled: false
+
+  redis-ha:
+    enabled: true
+    # Check the redis-ha chart for more properties
+    exporter:
+      enabled: true
+
+  server:
+    name: server
+    replicas: 1
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 5
+      targetCPUUtilizationPercentage: 50
+      targetMemoryUtilizationPercentage: 50
+
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: false
+
+    additionalApplications:
+    - name: master-bootstrap
+      namespace: argocd
+      project: master
+      source:
+        repoURL: https://github.com/andrewkaczynski/gitops.git
+        targetRevision: HEAD
+        path: clusters/master/bootstrap
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argocd
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+
+    additionalProjects:
+    - name: master
+      namespace: argocd
+      description: "Master Cluster"
+      sourceRepos:
+      - '*'
+      destinations:
+      - namespace: '*'
+        server: https://kubernetes.default.svc
+      clusterResourceWhitelist:
+        - group: "*"
+          kind: "*"
+
+  repoServer:
+    name: repo-server
+
+    replicas: 1
+
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 5
+      targetCPUUtilizationPercentage: 50
+      targetMemoryUtilizationPercentage: 50
+
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: false
+
+  ## Argo Configs
+  configs:
+    secret:
+      # Argo expects the password in the secret to be bcrypt hashed. You can create this hash with
+      # `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
+      argocdServerAdminPassword: "$2a$10$vpB1G5Mlx9anScH9zdzQouofwzs..2iNyIQqbv6SO1HgiHMQIvVq."
