@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/andrewkaczynski/gitops.git
     targetRevision: HEAD
-    path: clusters/master/servicemonitors
+    path: clusters/master/configurations/servicemonitors
 
   destination:
     server: https://kubernetes.default.svc
