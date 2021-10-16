@@ -1,0 +1,29 @@
+kube-prometheus-stack:
+  alertmanager:
+    alertmanagerSpec:
+      image:
+        repository: quay.io/prometheus/alertmanager
+        tag: v0.23.0
+
+  grafana:
+    enabled: true
+
+  prometheusOperator:
+    enabled: true
+    image:
+      repository: quay.io/prometheus-operator/prometheus-operator
+      tag: v0.51.2
+
+    prometheusConfigReloaderImage:
+      repository: quay.io/prometheus-operator/prometheus-config-reloader
+      tag: v0.51.2
+
+  prometheus:
+    enabled: true
+    prometheusSpec:
+      image:
+        repository: quay.io/prometheus/prometheus
+        tag: v2.30.3
+
+      serviceMonitorSelectorNilUsesHelmValues: nil
+      serviceMonitorSelector: {}

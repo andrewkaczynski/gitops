@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: master-kube-prometheus-stack
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: master
+  source:
+    repoURL: https://github.com/andrewkaczynski/gitops.git
+    targetRevision: HEAD
+    path: repos/kube-prometheus-stack/19.1.0/
+
+    helm:
+      releaseName: kube-prometheus-stack
+      valueFiles:
+      - ../../../clusters/master/applications/kube-prometheus-stack/values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+
+  syncPolicy:
+    automated: 
+      prune: true
+      selfHeal: true
