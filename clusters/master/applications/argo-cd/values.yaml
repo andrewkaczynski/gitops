@@ -68,6 +68,17 @@ argo-cd:
       clusterResourceWhitelist:
         - group: "*"
           kind: "*"
+    - name: clients
+      namespace: argocd
+      description: "Clients Clusters"
+      sourceRepos:
+      - '*'
+      destinations:
+      - namespace: '*'
+        server: "*"
+      clusterResourceWhitelist:
+        - group: "*"
+          kind: "*"
 
   repoServer:
     name: repo-server
