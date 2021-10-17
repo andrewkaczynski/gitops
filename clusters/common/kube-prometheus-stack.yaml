@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: clusters-kube-prometheus-stacks
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          role: client
+  template:
+    metadata:
+      name: '{{name}}-kube-prometheus-stack'
+    spec:
+      project: "clients"
+      source:
+        path: repos/kube-prometheus-stack/19.1.0
+
+        helm:
+          releaseName: kube-prometheus-stack
+          valueFiles:
+          - ../../../clusters/common/applications/kube-prometheus-stack/values.yaml
+      destination:
+        server: '{{server}}'
+      syncPolicy:
+        automated: 
+          prune: true
+          selfHeal: true

@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: clusters-namespaces
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          role: client
+  template:
+    metadata:
+      name: '{{name}}-namespaces'
+    spec:
+      project: "clients"
+      source:
+        repoURL: https://github.com/andrewkaczynski/gitops.git
+        targetRevision: HEAD
+        path: clusters/common/namespaces
+      destination:
+        server: '{{server}}'
+      syncPolicy:
+        automated: 
+          prune: true
+          selfHeal: true
