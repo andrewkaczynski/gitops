@@ -1,0 +1,7 @@
+name: argocd-applicationset
+version: 1.5.1
+apiVersion: v2
+dependencies:
+- name: argocd-applicationset
+  repository: https://argoproj.github.io/argo-helm
+  version: 1.5.1

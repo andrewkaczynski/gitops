@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: master-argocd-applicationset
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: master
+  source:
+    repoURL: https://github.com/andrewkaczynski/gitops.git
+    targetRevision: HEAD
+    path: repos/argocd-applicationset/1.5.1/
+
+    helm:
+      releaseName: argocd-applicationset
+      valueFiles:
+      - ../../../clusters/master/applications/argocd-applicationset/values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+
+  syncPolicy:
+    automated: 
+      prune: true
+      selfHeal: true

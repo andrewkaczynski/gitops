@@ -10,6 +10,7 @@ This is my Argo CD demo GitOps repository.
 
 ```bash
 minikube start --memory=4096 --cpus=2 --nodes=3 --kubernetes-version=v1.20.10 --driver="virtualbox" --profile="master"
+minikube addons enable metrics-server --profile="master"
 ```
 
 2. Add Argo CD Helm repository to your local Helm configuration. Make sure you use >v3.0 version (tested on v3.7.1).
