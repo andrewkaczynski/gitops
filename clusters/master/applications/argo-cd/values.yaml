@@ -32,6 +32,9 @@ argo-cd:
     autoscaling:
       enabled: false
 
+    extraArgs:
+    - --insecure
+
     metrics:
       enabled: true
       serviceMonitor:
