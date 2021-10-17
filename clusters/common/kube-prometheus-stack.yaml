@@ -2,6 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: clusters-kube-prometheus-stacks
+  namespace: argocd
 spec:
   generators:
   - clusters:
@@ -14,6 +15,8 @@ spec:
     spec:
       project: "clients"
       source:
+        repoURL: https://github.com/andrewkaczynski/gitops.git
+        targetRevision: HEAD
         path: repos/kube-prometheus-stack/19.1.0
 
         helm:
@@ -22,6 +25,7 @@ spec:
           - ../../../clusters/common/applications/kube-prometheus-stack/values.yaml
       destination:
         server: '{{server}}'
+        namespace: monitoring
       syncPolicy:
         automated: 
           prune: true
