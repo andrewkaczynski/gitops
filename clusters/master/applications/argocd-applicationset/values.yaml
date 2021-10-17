@@ -1,5 +1,6 @@
-replicaCount: 2
+argocd-applicationset:
+  replicaCount: 2
 
-image:
-  repository: quay.io/argoproj/argocd-applicationset
-  tag: "v0.2.0"
+  image:
+    repository: quay.io/argoproj/argocd-applicationset
+    tag: "v0.2.0"
